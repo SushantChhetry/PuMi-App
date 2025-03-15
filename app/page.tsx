@@ -27,10 +27,10 @@ export default function Home() {
     <div className="min-h-screen bg-background">
       <header className="border-b">
         <div className="container flex h-16 items-center px-4 sm:px-6">
-          <div className="flex items-center gap-2 font-semibold cursor-pointer" onClick={() => navigateTo("home")}>
-            <span className="bg-primary text-primary-foreground rounded-md px-2 py-1 text-sm">Pu</span>
-            <span className="text-lg">Mi</span>
-          </div>
+        <div className="flex items-center gap-2 font-semibold cursor-pointer" onClick={() => navigateTo("home")}>
+          <img src="/Logo-transparent.png" alt="PuMi Logo" className="h-12 w-auto" />
+        </div>
+
           <div className="ml-auto flex items-center gap-4">
             <button
               className="text-sm text-muted-foreground hover:text-foreground"

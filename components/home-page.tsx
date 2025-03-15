@@ -26,7 +26,7 @@ export default function HomePage({ onNavigate }: HomePageProps) {
           <CardHeader className="pb-3 bg-primary/5">
             <CardTitle className="flex items-center gap-2">
               <MessageSquare className="h-5 w-5" />
-              UserSynthesizer Dashboard
+              User Feedback Dashboard
             </CardTitle>
             <CardDescription>AI-powered feedback analysis and prioritization</CardDescription>
           </CardHeader>
@@ -56,7 +56,7 @@ export default function HomePage({ onNavigate }: HomePageProps) {
           </CardContent>
           <CardFooter className="pt-4 pb-6">
             <Button className="w-full" onClick={() => onNavigate("dashboard")}>
-              Go to UserSynthesizer
+              View Dashboard
               <ArrowRight className="ml-2 h-4 w-4" />
             </Button>
           </CardFooter>
@@ -67,7 +67,7 @@ export default function HomePage({ onNavigate }: HomePageProps) {
           <CardHeader className="pb-3 bg-primary/5">
             <CardTitle className="flex items-center gap-2">
               <ListTodo className="h-5 w-5" />
-              Lightweight Task Board
+              Task Board
             </CardTitle>
             <CardDescription>Simple task management and tracking</CardDescription>
           </CardHeader>

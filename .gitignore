@@ -1,0 +1,36 @@
+# Node modules
+node_modules/
+.pnpm-store/
+.pnp.cjs
+.pnp.loader.mjs
+
+# Build output
+.next/
+out/
+dist/
+
+# Environment variables
+.env*
+!.env.example
+
+# Logs
+npm-debug.log*
+pnpm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+*.log
+
+# Editor & system files
+.vscode/
+.idea/
+.DS_Store
+*.swp
+*.swo
+
+# TypeScript cache
+*.tsbuildinfo
+
+# Dependency lock files (if using a specific package manager)
+yarn.lock
+package-lock.json
+pnpm-lock.yaml
