@@ -13,16 +13,17 @@ import DocumentationModal from "@/components/documentation-modal"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
 import MarketInsightsView from "@/components/market-insights-view"
+import InsightsView from "@/components/insights-view"
 
 export default function Home() {
-  const [currentView, setCurrentView] = useState<"home" | "dashboard" | "taskboard" | "profile" | "marketinsights">(
-    "home",
-  )
+  const [currentView, setCurrentView] = useState<
+    "home" | "dashboard" | "taskboard" | "profile" | "marketinsights" | "insights"
+  >("home")
   const [isPricingOpen, setIsPricingOpen] = useState(false)
   const [isDocumentationOpen, setIsDocumentationOpen] = useState(false)
 
   // Function to navigate between views
-  const navigateTo = (view: "home" | "dashboard" | "taskboard" | "profile" | "marketinsights") => {
+  const navigateTo = (view: "home" | "dashboard" | "taskboard" | "profile" | "marketinsights" | "insights") => {
     setCurrentView(view)
   }
 
@@ -35,6 +36,9 @@ export default function Home() {
         </div>
 
           <div className="ml-auto flex items-center gap-4">
+            <Button variant="ghost" className="text-sm font-medium" onClick={() => navigateTo("insights")}>
+              Executive Insights
+            </Button>
             <button
               className="text-sm text-muted-foreground hover:text-foreground"
               onClick={() => setIsDocumentationOpen(true)}
@@ -109,6 +113,18 @@ export default function Home() {
               </p>
             </div>
             <MarketInsightsView />
+          </div>
+        )}
+
+        {currentView === "insights" && (
+          <div className="space-y-4">
+            <div className="mb-8">
+              <h1 className="text-2xl font-bold tracking-tight">Executive Insights</h1>
+              <p className="text-muted-foreground mt-1">
+                Consolidated insights across feedback, tasks, and market analysis
+              </p>
+            </div>
+            <InsightsView />
           </div>
         )}
 

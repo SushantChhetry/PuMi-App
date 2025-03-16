@@ -1,11 +1,11 @@
 "use client"
 
-import { ArrowRight, MessageSquare, ListTodo, LineChart } from "lucide-react"
+import { ArrowRight, MessageSquare, ListTodo, LineChart, Lightbulb } from "lucide-react"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 
 interface HomePageProps {
-  onNavigate: (view: "home" | "dashboard" | "taskboard" | "marketinsights") => void
+  onNavigate: (view: "home" | "dashboard" | "taskboard" | "marketinsights" | "insights") => void
 }
 
 export default function HomePage({ onNavigate }: HomePageProps) {
@@ -16,7 +16,11 @@ export default function HomePage({ onNavigate }: HomePageProps) {
         <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">Welcome to PuMi</h1>
         <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
           This tool helps you quickly gather, prioritize, and track feedback or tasks, all in one place.
-        </p>
+        </p>   
+        <Button variant="outline" size="lg" className="mt-2" onClick={() => onNavigate("insights")}>
+          <Lightbulb className="mr-2 h-4 w-4" />
+          View Executive Insights
+        </Button>
       </div>
 
       {/* Main Options */}
