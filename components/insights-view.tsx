@@ -34,7 +34,12 @@ import {
   AlertCircle,
   Share2,
   Slack,
+  X,
 } from "lucide-react"
+// Add these imports at the top with the other imports
+import { Textarea } from "@/components/ui/textarea"
+import { Paperclip, FileText, Link2, Globe, Pencil, Plus, Info } from "lucide-react"
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
 
 export default function InsightsView() {
   // Add these state variables after the existing useState declarations
@@ -54,6 +59,40 @@ export default function InsightsView() {
   const [includeTopInsights, setIncludeTopInsights] = useState(true)
   const [includeRecommendations, setIncludeRecommendations] = useState(true)
   const [shareSuccess, setShareSuccess] = useState(false)
+
+  // Add these state variables after the other useState declarations
+  const [businessContextDialogOpen, setBusinessContextDialogOpen] = useState(false)
+  const [companyInfo, setCompanyInfo] = useState({
+    name: "Acme Inc.",
+    industry: "SaaS",
+    size: "50-100 employees",
+    target: "Small to medium businesses",
+    description: "Acme provides workflow automation tools for marketing teams.",
+  })
+  const [productVision, setProductVision] = useState(
+    "To become the leading workflow automation platform for marketing teams by simplifying complex processes and providing actionable insights.",
+  )
+  const [documents, setDocuments] = useState([
+    {
+      id: 1,
+      title: "Q1 2025 Product Roadmap",
+      type: "notion",
+      url: "https://notion.so/acme/roadmap",
+    },
+    {
+      id: 2,
+      title: "Competitor Analysis",
+      type: "gdoc",
+      url: "https://docs.google.com/document/d/123456",
+    },
+    {
+      id: 3,
+      title: "User Research Findings",
+      type: "figma",
+      url: "https://figma.com/file/abcdef",
+    },
+  ])
+  const [newDocument, setNewDocument] = useState({ title: "", type: "link", url: "" })
 
   // First, let's add time period-specific data sets after the useState declarations
   // Replace the existing sample data with these time-specific data sets
@@ -1066,6 +1105,48 @@ export default function InsightsView() {
     }, 1000)
   }
 
+  // Add this function before the return statement
+  const getDocumentIcon = (type: string) => {
+    switch (type) {
+      case "notion":
+        return <FileText className="h-4 w-4" />
+      case "gdoc":
+        return <FileText className="h-4 w-4 text-blue-600" />
+      case "figma":
+        return <FileText className="h-4 w-4 text-purple-600" />
+      default:
+        return <Link2 className="h-4 w-4" />
+    }
+  }
+
+  // Add this function before the return statement
+  const addDocument = () => {
+    if (newDocument.title.trim() === "" || newDocument.url.trim() === "") return
+
+    setDocuments([
+      ...documents,
+      {
+        id: Date.now(),
+        title: newDocument.title,
+        type: newDocument.type,
+        url: newDocument.url,
+      },
+    ])
+
+    setNewDocument({ title: "", type: "link", url: "" })
+  }
+
+  // Add this function before the return statement
+  const removeDocument = (id: number) => {
+    setDocuments(documents.filter((doc) => doc.id !== id))
+  }
+
+  // Add this function before the return statement
+  const saveBusinessContext = () => {
+    // In a real app, this would save to a database
+    setBusinessContextDialogOpen(false)
+  }
+
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
@@ -1277,7 +1358,7 @@ export default function InsightsView() {
                             </span>
                             <span className="text-xs font-medium">45%</span>
                           </div>
-                          <Progress value={45} className="h-1.5 bg-muted" />
+                          <Progress value={45} className="h-1.5 bg-muted"  />
                         </div>
                         <div>
                           <div className="flex items-center justify-between mb-1">
@@ -1297,7 +1378,7 @@ export default function InsightsView() {
                             </span>
                             <span className="text-xs font-medium">25%</span>
                           </div>
-                          <Progress value={25} className="h-1.5 bg-muted" />
+                          <Progress value={25} className="h-1.5 bg-muted"  />
                         </div>
                       </div>
                     </div>
@@ -1421,7 +1502,7 @@ export default function InsightsView() {
                             </span>
                             <span className="text-xs font-medium">30%</span>
                           </div>
-                          <Progress value={30} className="h-1.5 bg-muted" />
+                          <Progress value={30} className="h-1.5 bg-muted"  />
                         </div>
                         <div>
                           <div className="flex items-center justify-between mb-1">
@@ -1431,14 +1512,14 @@ export default function InsightsView() {
                             </span>
                             <span className="text-xs font-medium">45%</span>
                           </div>
-                          <Progress value={45} className="h-1.5 bg-muted"  />
+                          <Progress value={45} className="h-1.5 bg-muted" />
                         </div>
                         <div>
                           <div className="flex items-center justify-between mb-1">
                             <span className="text-xs flex items-center">
                               <span className="h-2 w-2 rounded-full bg-green-500 mr-1"></span>
                               Low
-                            </span>ze
+                            </span>
                             <span className="text-xs font-medium">25%</span>
                           </div>
                           <Progress value={25} className="h-1.5 bg-muted"  />
@@ -1663,6 +1744,105 @@ export default function InsightsView() {
           </Card>
         </TabsContent>
       </Tabs>
+
+      <Card className="mt-6">
+        <CardHeader className="flex flex-row items-center justify-between">
+          <div>
+            <CardTitle>Business Context</CardTitle>
+            <CardDescription>Company information and product vision used to personalize insights</CardDescription>
+          </div>
+          <Button variant="outline" size="sm" onClick={() => setBusinessContextDialogOpen(true)}>
+            <Pencil className="h-4 w-4 mr-2" />
+            Edit Context
+          </Button>
+        </CardHeader>
+        <CardContent>
+          <div className="grid gap-6 md:grid-cols-2">
+            <div>
+              <h3 className="text-sm font-medium mb-2">Company Information</h3>
+              <div className="space-y-2 text-sm">
+                <div className="grid grid-cols-3 gap-1">
+                  <span className="text-muted-foreground">Company:</span>
+                  <span className="col-span-2 font-medium">{companyInfo.name}</span>
+                </div>
+                <div className="grid grid-cols-3 gap-1">
+                  <span className="text-muted-foreground">Industry:</span>
+                  <span className="col-span-2">{companyInfo.industry}</span>
+                </div>
+                <div className="grid grid-cols-3 gap-1">
+                  <span className="text-muted-foreground">Size:</span>
+                  <span className="col-span-2">{companyInfo.size}</span>
+                </div>
+                <div className="grid grid-cols-3 gap-1">
+                  <span className="text-muted-foreground">Target Market:</span>
+                  <span className="col-span-2">{companyInfo.target}</span>
+                </div>
+                <div className="grid grid-cols-3 gap-1">
+                  <span className="text-muted-foreground">Description:</span>
+                  <span className="col-span-2">{companyInfo.description}</span>
+                </div>
+              </div>
+
+              <h3 className="text-sm font-medium mt-4 mb-2">Product Vision</h3>
+              <div className="text-sm border rounded-md p-3 bg-muted/30">{productVision}</div>
+            </div>
+
+            <div>
+              <div className="flex items-center justify-between mb-2">
+                <h3 className="text-sm font-medium">Linked Documents</h3>
+                <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <div className="flex items-center text-xs text-muted-foreground">
+                        <Info className="h-3.5 w-3.5 mr-1" />
+                        <span>Used for context</span>
+                      </div>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p className="max-w-xs text-xs">
+                        These documents are used to provide additional context for generating personalized insights.
+                      </p>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
+              </div>
+
+              <div className="space-y-2">
+                {documents.map((doc) => (
+                  <div key={doc.id} className="flex items-center justify-between p-2 border rounded-md">
+                    <div className="flex items-center gap-2">
+                      {getDocumentIcon(doc.type)}
+                      <span className="text-sm">{doc.title}</span>
+                    </div>
+                    <a
+                      href={doc.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-primary hover:underline text-sm flex items-center"
+                    >
+                      <Globe className="h-3.5 w-3.5 mr-1" />
+                      View
+                    </a>
+                  </div>
+                ))}
+              </div>
+
+              <div className="mt-4 p-3 border border-dashed rounded-md bg-muted/20">
+                <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                  <Paperclip className="h-4 w-4" />
+                  <span>How this context influences insights:</span>
+                </div>
+                <ul className="mt-2 space-y-1 text-sm pl-6 list-disc">
+                  <li>Prioritizes insights relevant to {companyInfo.industry} industry</li>
+                  <li>Focuses on feedback from {companyInfo.target}</li>
+                  <li>Aligns recommendations with your product vision</li>
+                  <li>Considers information from linked documents</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
 
       <div className="flex justify-end">
         <Button variant="outline" className="gap-1 mr-2" onClick={() => setShareDialogOpen(true)}>
@@ -1897,6 +2077,201 @@ export default function InsightsView() {
               <p className="text-sm text-muted-foreground">Your insights summary has been shared to {slackChannel}.</p>
             </div>
           )}
+        </DialogContent>
+      </Dialog>
+
+      {/* Business Context Dialog */}
+      <Dialog open={businessContextDialogOpen} onOpenChange={setBusinessContextDialogOpen}>
+        <DialogContent className="sm:max-w-[700px] max-h-[90vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle>Edit Business Context</DialogTitle>
+            <DialogDescription>
+              Add information about your company and product to personalize insights.
+            </DialogDescription>
+          </DialogHeader>
+
+          <div className="grid gap-6 py-4">
+            <div>
+              <h3 className="text-sm font-medium mb-3">Company Information</h3>
+              <div className="grid gap-3">
+                <div className="grid grid-cols-2 gap-3">
+                  <div className="space-y-2">
+                    <Label htmlFor="company-name">Company Name</Label>
+                    <Input
+                      id="company-name"
+                      value={companyInfo.name}
+                      onChange={(e) => setCompanyInfo({ ...companyInfo, name: e.target.value })}
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="company-industry">Industry</Label>
+                    <Input
+                      id="company-industry"
+                      value={companyInfo.industry}
+                      onChange={(e) => setCompanyInfo({ ...companyInfo, industry: e.target.value })}
+                    />
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-2 gap-3">
+                  <div className="space-y-2">
+                    <Label htmlFor="company-size">Company Size</Label>
+                    <Input
+                      id="company-size"
+                      value={companyInfo.size}
+                      onChange={(e) => setCompanyInfo({ ...companyInfo, size: e.target.value })}
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="target-market">Target Market</Label>
+                    <Input
+                      id="target-market"
+                      value={companyInfo.target}
+                      onChange={(e) => setCompanyInfo({ ...companyInfo, target: e.target.value })}
+                    />
+                  </div>
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="company-description">Brief Description</Label>
+                  <Textarea
+                    id="company-description"
+                    value={companyInfo.description}
+                    onChange={(e) => setCompanyInfo({ ...companyInfo, description: e.target.value })}
+                    rows={2}
+                  />
+                </div>
+              </div>
+            </div>
+
+            <div>
+              <h3 className="text-sm font-medium mb-3">Product Vision</h3>
+              <div className="space-y-2">
+                <Label htmlFor="product-vision">Vision Statement</Label>
+                <Textarea
+                  id="product-vision"
+                  value={productVision}
+                  onChange={(e) => setProductVision(e.target.value)}
+                  placeholder="Describe your product vision and long-term goals..."
+                  rows={3}
+                />
+              </div>
+            </div>
+
+            <div>
+              <div className="flex items-center justify-between mb-3">
+                <h3 className="text-sm font-medium">Linked Documents</h3>
+                <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <div className="flex items-center text-xs text-muted-foreground">
+                        <Info className="h-3.5 w-3.5 mr-1" />
+                        <span>Used for context</span>
+                      </div>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p className="max-w-xs text-xs">
+                        Link to external documents like Notion pages, Google Docs, or Figma files to provide additional
+                        context for generating personalized insights.
+                      </p>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
+              </div>
+
+              <div className="space-y-3">
+                <div className="border rounded-md divide-y max-h-[200px] overflow-y-auto">
+                  {documents.length > 0 ? (
+                    documents.map((doc) => (
+                      <div key={doc.id} className="flex items-center justify-between p-3">
+                        <div className="flex items-center gap-2">
+                          {getDocumentIcon(doc.type)}
+                          <span className="text-sm">{doc.title}</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <a
+                            href={doc.url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-primary hover:underline text-sm"
+                          >
+                            View
+                          </a>
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            className="h-8 w-8 p-0 text-muted-foreground hover:text-destructive"
+                            onClick={() => removeDocument(doc.id)}
+                          >
+                            <X className="h-4 w-4" />
+                            <span className="sr-only">Remove</span>
+                          </Button>
+                        </div>
+                      </div>
+                    ))
+                  ) : (
+                    <div className="p-4 text-center text-sm text-muted-foreground">
+                      No documents linked yet. Add your first document below.
+                    </div>
+                  )}
+                </div>
+
+                <div className="grid grid-cols-[1fr,auto,1fr,auto] gap-2 items-end">
+                  <div className="space-y-1">
+                    <Label htmlFor="doc-title" className="text-xs">
+                      Document Title
+                    </Label>
+                    <Input
+                      id="doc-title"
+                      value={newDocument.title}
+                      onChange={(e) => setNewDocument({ ...newDocument, title: e.target.value })}
+                      placeholder="Q1 Roadmap"
+                      className="h-9"
+                    />
+                  </div>
+                  <div className="space-y-1">
+                    <Label htmlFor="doc-type" className="text-xs">
+                      Type
+                    </Label>
+                    <select
+                      id="doc-type"
+                      value={newDocument.type}
+                      onChange={(e) => setNewDocument({ ...newDocument, type: e.target.value })}
+                      className="h-9 rounded-md border border-input bg-background px-3 py-1 text-sm shadow-sm"
+                    >
+                      <option value="link">Link</option>
+                      <option value="notion">Notion</option>
+                      <option value="gdoc">Google Doc</option>
+                      <option value="figma">Figma</option>
+                    </select>
+                  </div>
+                  <div className="space-y-1">
+                    <Label htmlFor="doc-url" className="text-xs">
+                      URL
+                    </Label>
+                    <Input
+                      id="doc-url"
+                      value={newDocument.url}
+                      onChange={(e) => setNewDocument({ ...newDocument, url: e.target.value })}
+                      placeholder="https://..."
+                      className="h-9"
+                    />
+                  </div>
+                  <Button onClick={addDocument} size="sm" className="gap-1">
+                    <Plus className="h-4 w-4" />
+                    Add
+                  </Button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setBusinessContextDialogOpen(false)}>
+              Cancel
+            </Button>
+            <Button onClick={saveBusinessContext}>Save Context</Button>
+          </DialogFooter>
         </DialogContent>
       </Dialog>
     </div>
