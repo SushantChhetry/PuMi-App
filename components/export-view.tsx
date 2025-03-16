@@ -1,7 +1,13 @@
 import type React from "react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { ArrowUpRight, FileDown, Github, Trello, FileText } from "lucide-react"
+import { ArrowUpRight, FileDown } from "lucide-react"
+
+// Use the public URL instead of importing them
+const NotionLogo = "/assets/notion-logo.png"; // PNG version since SVG isn't in public
+const TrelloLogo = "/assets/trello-logo.jpeg";
+const GitHubLogo = "/assets/github-logo.svg";
+const AirtableLogo = "/assets/airtable-logo.png";
 
 export default function ExportView() {
   return (
@@ -19,10 +25,10 @@ export default function ExportView() {
 
         <TabsContent value="integrations" className="space-y-4">
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-            <ExportCard title="Notion" description="Export insights to Notion pages or databases" icon={FileText} />
-            <ExportCard title="GitHub Issues" description="Create issues from feedback clusters" icon={Github} />
-            <ExportCard title="Trello" description="Create cards for each feedback theme" icon={Trello} />
-            <ExportCard title="Airtable" description="Export to your Airtable bases" icon={FileText} />
+            <ExportCard title="Notion" description="Export insights to Notion pages or databases" icon={NotionLogo} />
+            <ExportCard title="GitHub Issues" description="Create issues from feedback clusters" icon={GitHubLogo} />
+            <ExportCard title="Trello" description="Create cards for each feedback theme" icon={TrelloLogo} />
+            <ExportCard title="Airtable" description="Export to your Airtable bases" icon={AirtableLogo} />
           </div>
         </TabsContent>
 
@@ -61,7 +67,7 @@ export default function ExportView() {
           <div className="space-y-2">
             <div className="flex items-center justify-between rounded-md border p-3">
               <div className="flex items-center gap-3">
-                <Github className="h-5 w-5 text-muted-foreground" />
+                <img src={GitHubLogo} alt="GitHub" className="h-5 w-5 text-muted-foreground" />
                 <div>
                   <p className="text-sm font-medium">GitHub Issues Export</p>
                   <p className="text-xs text-muted-foreground">14 issues created • March 15, 2025</p>
@@ -100,14 +106,18 @@ function ExportCard({
 }: {
   title: string
   description: string
-  icon: React.ElementType
+  icon: string | React.ElementType
 }) {
   return (
     <Card>
       <CardContent className="pt-6">
         <div className="flex items-start gap-4">
           <div className="rounded-md bg-primary/10 p-2">
-            <Icon className="h-6 w-6 text-primary" />
+            {typeof Icon === "string" ? (
+              <img src={Icon} alt={title} className="h-6 w-6 text-primary" />
+            ) : (
+              <Icon className="h-6 w-6 text-primary" />
+            )}
           </div>
           <div className="flex-1">
             <h3 className="font-medium">{title}</h3>
@@ -154,4 +164,3 @@ function DownloadOption({
     </div>
   )
 }
-

@@ -12,14 +12,17 @@ import ProfileSettings from "@/components/profile-settings"
 import DocumentationModal from "@/components/documentation-modal"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
+import MarketInsightsView from "@/components/market-insights-view"
 
 export default function Home() {
-  const [currentView, setCurrentView] = useState<"home" | "dashboard" | "taskboard" | "profile">("home")
+  const [currentView, setCurrentView] = useState<"home" | "dashboard" | "taskboard" | "profile" | "marketinsights">(
+    "home",
+  )
   const [isPricingOpen, setIsPricingOpen] = useState(false)
   const [isDocumentationOpen, setIsDocumentationOpen] = useState(false)
 
   // Function to navigate between views
-  const navigateTo = (view: "home" | "dashboard" | "taskboard" | "profile") => {
+  const navigateTo = (view: "home" | "dashboard" | "taskboard" | "profile" | "marketinsights") => {
     setCurrentView(view)
   }
 
@@ -94,6 +97,10 @@ export default function Home() {
               </p>
             </div>
             <TaskBoard />
+          </div>
+        )}
+
+            <MarketInsightsView />
           </div>
         )}
 

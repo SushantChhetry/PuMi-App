@@ -1,11 +1,11 @@
 "use client"
 
-import { ArrowRight, MessageSquare, ListTodo } from "lucide-react"
+import { ArrowRight, MessageSquare, ListTodo, LineChart } from "lucide-react"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 
 interface HomePageProps {
-  onNavigate: (view: "home" | "dashboard" | "taskboard") => void
+  onNavigate: (view: "home" | "dashboard" | "taskboard" | "marketinsights") => void
 }
 
 export default function HomePage({ onNavigate }: HomePageProps) {
@@ -20,7 +20,7 @@ export default function HomePage({ onNavigate }: HomePageProps) {
       </div>
 
       {/* Main Options */}
-      <div className="grid gap-6 md:grid-cols-2">
+      <div className="grid gap-6 md:grid-cols-3">
         {/* UserSynthesizer Dashboard Option */}
         <Card className="overflow-hidden transition-all hover:shadow-md">
           <CardHeader className="pb-3 bg-primary/5">
@@ -98,6 +98,47 @@ export default function HomePage({ onNavigate }: HomePageProps) {
           <CardFooter className="pt-4 pb-6">
             <Button className="w-full" onClick={() => onNavigate("taskboard")}>
               Go to Task Board
+              <ArrowRight className="ml-2 h-4 w-4" />
+            </Button>
+          </CardFooter>
+        </Card>
+
+        {/* Market Insights */}
+        <Card className="overflow-hidden transition-all hover:shadow-md">
+          <CardHeader className="pb-3 bg-primary/5">
+            <CardTitle className="flex items-center gap-2">
+              <LineChart className="h-5 w-5" />
+              Market Insights Dashboard
+            </CardTitle>
+            <CardDescription>Competitor analysis and market trends</CardDescription>
+          </CardHeader>
+          <CardContent className="pt-6">
+            <div className="space-y-4">
+              <ul className="space-y-2 text-sm">
+                <li className="flex items-start gap-2">
+                  <span className="rounded-full bg-primary/10 p-1 mt-0.5">
+                    <ArrowRight className="h-3 w-3 text-primary" />
+                  </span>
+                  <span>Track competitor features and positioning</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="rounded-full bg-primary/10 p-1 mt-0.5">
+                    <ArrowRight className="h-3 w-3 text-primary" />
+                  </span>
+                  <span>Analyze market trends and opportunities</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="rounded-full bg-primary/10 p-1 mt-0.5">
+                    <ArrowRight className="h-3 w-3 text-primary" />
+                  </span>
+                  <span>Monitor industry news and updates</span>
+                </li>
+              </ul>
+            </div>
+          </CardContent>
+          <CardFooter className="pt-4 pb-6">
+            <Button className="w-full" onClick={() => onNavigate("marketinsights")}>
+              Go to Market Insights
               <ArrowRight className="ml-2 h-4 w-4" />
             </Button>
           </CardFooter>
