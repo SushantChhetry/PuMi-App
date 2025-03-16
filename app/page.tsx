@@ -100,6 +100,14 @@ export default function Home() {
           </div>
         )}
 
+        {currentView === "marketinsights" && (
+          <div className="space-y-4">
+            <div className="mb-8">
+              <h1 className="text-2xl font-bold tracking-tight">Market Insights</h1>
+              <p className="text-muted-foreground mt-1">
+                Track competitors, market trends, and strategic opportunities
+              </p>
+            </div>
             <MarketInsightsView />
           </div>
         )}
