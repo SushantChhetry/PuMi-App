@@ -14,10 +14,12 @@ import { CreditCard, HelpCircle, LogOut } from "lucide-react"
 
 interface ProfileSettingsProps {
   onClose: () => void
-  setIsPricingOpen?: (open: boolean) => void
+  setIsPricingOpen?: (open: boolean) => void  
+  onLogout?: () => void
+
 }
 
-export default function ProfileSettings({ onClose, setIsPricingOpen }: ProfileSettingsProps) {
+export default function ProfileSettings({ onClose, setIsPricingOpen, onLogout }: ProfileSettingsProps) {
   const [activeTab, setActiveTab] = useState("profile")
 
   // Mock user data
@@ -37,7 +39,11 @@ export default function ProfileSettings({ onClose, setIsPricingOpen }: ProfileSe
       onClose()
     }
   }
-
+  const handleLogout = () => {
+    if (onLogout) {
+      onLogout()
+    }
+  }
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between mb-6">
@@ -54,7 +60,7 @@ export default function ProfileSettings({ onClose, setIsPricingOpen }: ProfileSe
             <HelpCircle className="mr-2 h-4 w-4" />
             Help
           </Button>
-          <Button variant="outline" size="sm">
+          <Button variant="outline" size="sm" onClick={handleLogout}>
             <LogOut className="mr-2 h-4 w-4" />
             Log out
           </Button>

@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import DashboardView from "@/components/dashboard-view"
 import UploadView from "@/components/upload-view"
@@ -14,6 +14,7 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
 import MarketInsightsView from "@/components/market-insights-view"
 import InsightsView from "@/components/insights-view"
+import LoginPage from "@/components/login-page"
 
 export default function Home() {
   const [currentView, setCurrentView] = useState<
@@ -21,10 +22,36 @@ export default function Home() {
   >("home")
   const [isPricingOpen, setIsPricingOpen] = useState(false)
   const [isDocumentationOpen, setIsDocumentationOpen] = useState(false)
+  const [isLoggedIn, setIsLoggedIn] = useState(false)
+
+  // Check if user is logged in from localStorage on initial load
+  useEffect(() => {
+    const loginStatus = localStorage.getItem("isLoggedIn")
+    if (loginStatus === "true") {
+      setIsLoggedIn(true)
+    }
+  }, [])
+
+  // Function to handle login
+  const handleLogin = () => {
+    setIsLoggedIn(true)
+    localStorage.setItem("isLoggedIn", "true")
+  }
+
+  // Function to handle logout
+  const handleLogout = () => {
+    setIsLoggedIn(false)
+    localStorage.removeItem("isLoggedIn")
+  }
 
   // Function to navigate between views
   const navigateTo = (view: "home" | "dashboard" | "taskboard" | "profile" | "marketinsights" | "insights") => {
     setCurrentView(view)
+  }
+
+  // If not logged in, show login page
+  if (!isLoggedIn) {
+    return <LoginPage onLogin={handleLogin} />
   }
 
   return (
@@ -34,7 +61,6 @@ export default function Home() {
         <div className="flex items-center gap-2 font-semibold cursor-pointer" onClick={() => navigateTo("home")}>
           <img src="/Logo-transparent.png" alt="PuMi Logo" className="h-12 w-auto" />
         </div>
-
           <div className="ml-auto flex items-center gap-4">
             <Button variant="ghost" className="text-sm font-medium" onClick={() => navigateTo("insights")}>
               Executive Insights
@@ -129,7 +155,11 @@ export default function Home() {
         )}
 
         {currentView === "profile" && (
-          <ProfileSettings onClose={() => navigateTo("home")} setIsPricingOpen={setIsPricingOpen} />
+          <ProfileSettings
+            onClose={() => navigateTo("home")}
+            setIsPricingOpen={setIsPricingOpen}
+            onLogout={handleLogout}
+          />
         )}
       </main>
 
