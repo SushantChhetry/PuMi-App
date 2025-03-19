@@ -15,6 +15,7 @@ import { Button } from "@/components/ui/button"
 import MarketInsightsView from "@/components/market-insights-view"
 import InsightsView from "@/components/insights-view"
 import LoginPage from "@/components/login-page"
+import { ChatAssistant } from "@/components/chat-assistant"
 
 export default function Home() {
   const [currentView, setCurrentView] = useState<
@@ -166,6 +167,9 @@ export default function Home() {
       {/* Modals */}
       <PricingModal open={isPricingOpen} onOpenChange={setIsPricingOpen} />
       <DocumentationModal open={isDocumentationOpen} onOpenChange={setIsDocumentationOpen} />
+
+      {/* AI Chat Assistant */}
+      <ChatAssistant onNavigate={navigateTo} />
     </div>
   )
 }

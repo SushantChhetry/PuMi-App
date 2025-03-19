@@ -975,7 +975,6 @@ export default function HomePage({ onNavigate }: HomePageProps) {
                         <Progress
                           value={(member.tasks / 10) * 100}
                           className="h-1.5 mt-1"
-                          indicatorColor={member.tasks > 7 ? "bg-red-500" : "bg-primary"}
                         />
                       </div>
                     </div>
